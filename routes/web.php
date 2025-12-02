@@ -11,6 +11,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryItemController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/kamar', [HomeController::class, 'showKamar'])->name('home.kamar');
@@ -34,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('glampings/images/{image}', [GlampingController::class, 'destroyImage'])->name('glampings.images.destroy');
 
     Route::resources([
+        'users'         => UserController::class,
         'glampings'     => GlampingController::class,
         'facilities'    => FacilityController::class,
         'packages'      => PackageController::class,

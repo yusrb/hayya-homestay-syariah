@@ -924,257 +924,74 @@
                 <div id="gallery-modal-content" class="w-full h-full flex items-center justify-center"></div>
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-        const navbar = document.querySelector('nav');
-        const menuToggle = document.querySelector('.menu-toggle');
-        const mobileMenu = document.querySelector('.mobile-menu');
-
-        if (menuToggle && mobileMenu) {
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('max-h-0');
-                mobileMenu.classList.toggle('opacity-0');
-                mobileMenu.classList.toggle('max-h-screen');
-                mobileMenu.classList.toggle('opacity-100');
-            });
-        }
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 60) {
-                navbar.classList.add('navbar-scrolled');
-            } else {
-                navbar.classList.remove('navbar-scrolled');
-            }
-        });
-
-        document.querySelectorAll('a[href^="#"], a[href*="#"]:not([href="#"])').forEach(link => {
-            link.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href.startsWith('#') || href.includes('#')) {
-                    const targetId = href.includes('#') ? href.split('#')[1] : href.substring(1);
-                    const target = document.getElementById(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        window.scrollTo({
-                            top: target.offsetTop - 90,
-                            behavior: 'smooth'
-                        });
-
-                        if (mobileMenu && mobileMenu.classList.contains('opacity-100')) {
-                            mobileMenu.classList.replace('max-h-screen', 'max-h-0');
-                            mobileMenu.classList.replace('opacity-100', 'opacity-0');
-                        }
-                    }
-                }
-            });
-        });
-    });
-
-            function openReservationModal() {
-    const name = document.getElementById('initial-name').value;
-    const phone = document.getElementById('initial-phone').value;
-    const checkIn = document.getElementById('initial-checkIn').value;
-    const checkOut = document.getElementById('initial-checkOut').value;
-    const message = document.getElementById('initial-message').value;
-    document.getElementById('modal-name').value = name;
-    document.getElementById('modal-phone').value = phone;
-    document.getElementById('modal-checkIn').value = checkIn;
-    document.getElementById('modal-checkOut').value = checkOut;
-    document.getElementById('modal-message').value = message;
-    document.getElementById('reservationModal').classList.add('show');
-    calculateGlampingRate();
-}
-
-function calculateGlampingRate() {
-    const glampingSelect = document.querySelector('select[name="glampingId"]');
-    const roomCountInput = document.querySelector('input[name="roomCount"]');
-    const stayDurationInput = document.querySelector('input[name="stayDuration"]');
-    const glampingRateInput = document.getElementById('glampingRate');
-    const selectedOption = glampingSelect.options[glampingSelect.selectedIndex];
-    const price = selectedOption ? Number(selectedOption.dataset.price) || 0 : 0;
-    const roomCount = Number(roomCountInput.value) || 0;
-    const stayDuration = Number(stayDurationInput.value) || 0;
-    const glampingRate = price * roomCount * stayDuration;
-    glampingRateInput.value = glampingRate > 0 ? glampingRate : '';
-}
-
-function submitReservationForm() {
-    const form = document.getElementById('detail-reservasi-form');
-    const formData = new FormData(form);
-    const glampingSelect = form.querySelector('select[name="glampingId"]');
-    const selectedOption = glampingSelect.options[glampingSelect.selectedIndex];
-    const glampingTitle = selectedOption.dataset.title || 'Tidak dipilih';
-    const glampingType = selectedOption.dataset.type || 'Tidak diketahui';
-    const glampingPrice = selectedOption.dataset.price || '0';
-    let message = `Halo, saya ingin reservasi glamping:\n\n`;
-    message += `Nama: ${formData.get('name')}\n`;
-    message += `No. WhatsApp: ${formData.get('phone')}\n`;
-    message += `Alamat: ${formData.get('address')}\n`;
-    message += `Check-in: ${formData.get('checkIn')}\n`;
-    message += `Check-out: ${formData.get('checkOut')}\n`;
-    message += `Lama Menginap: ${formData.get('stayDuration')} hari\n`;
-    message += `Jumlah Room: ${formData.get('roomCount')}\n`;
-    message += `Kamar: ${glampingTitle} (${glampingType}, Rp ${Number(glampingPrice).toLocaleString('id-ID')}/malam)\n`;
-    message += `Jumlah Dewasa: ${formData.get('adultCount')}\n`;
-    message += `Jumlah Anak & Usia: ${formData.get('childCount') || 'Tidak ada'}\n`;
-    message += `Extra Bed: ${formData.get('extraBed')}\n`;
-    message += `Rombongan: ${formData.get('groupType') || 'Tidak disebutkan'}\n`;
-    message += `Jumlah Kendaraan: ${formData.get('vehicleCount') || '0'}\n`;
-    message += `Akun Instagram: ${formData.get('instagram') || 'Tidak ada'}\n`;
-    message += `Tarif Glamping: Rp ${Number(formData.get('glampingRate')).toLocaleString('id-ID')}\n`;
-    message += `DP: Rp ${Number(formData.get('downPayment')).toLocaleString('id-ID')}\n`;
-    message += `Wisata Jeep Adventure: ${formData.get('jeepAdventure')}\n`;
-    message += `Paket BBQ Grill: ${formData.get('bbqGrill')}\n`;
-    message += `Pesan Tambahan: ${formData.get('message') || 'Tidak ada'}\n`;
-    message += `Catatan: Foto buku nikah akan dikirim via WhatsApp (khusus pasutri).`;
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-    const marriageBook = formData.get('marriageBook');
-    if (marriageBook && marriageBook.size > 0) {
-        alert('Silakan kirim foto buku nikah langsung melalui WhatsApp setelah formulir terkirim.');
-    }
-    closeReservationModal();
-}
-
-function closeReservationModal() {
-    document.getElementById('reservationModal').classList.remove('show');
-}
-
-function showFacilityModal(facilityId) {
-    const facilities = JSON.parse('{{ json_encode($facilities) }}'.replace(/&quot;/g, '"'));
-    const facility = facilities.find(f => f.id === parseInt(facilityId));
-    if (!facility) {
-        console.error('Fasilitas tidak ditemukan');
-        return;
-    }
-    const modalContent = `
-        <div class="space-y-6">
-            <img src="${facility.primaryImage?.file_path ? '/storage/' + facility.primaryImage.file_path : '/images/placeholder.jpg'}" alt="${facility.name}" class="w-full h-64 object-cover rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800">${facility.name}</h3>
-            <p class="text-gray-600">${facility.description}</p>
-            ${facility.images && facility.images.length > 0 ? `
-                <div class="grid grid-cols-2 gap-4">
-                    ${facility.images.map(img => `
-                        <img src="/storage/${img.file_path}" alt="${facility.name}" class="w-full h-32 object-cover rounded-lg">
-                    `).join('')}
-                </div>
-            ` : ''}
-        </div>
-    `;
-    const modalContentElement = document.getElementById('facility-modal-content');
-    if (modalContentElement) {
-        modalContentElement.innerHTML = modalContent;
-        document.getElementById('facility-modal').classList.add('show');
-    } else {
-        console.error('Elemen facility-modal-content tidak ditemukan');
-    }
-}
-
-function closeFacilityModal() {
-    document.getElementById('facility-modal').classList.remove('show');
-}
-
-function showModal(content) {
-    const modal = document.getElementById('modal-container');
-    const modalInner = document.getElementById('modal-inner');
-    modalInner.innerHTML = content;
-    modal.classList.add('show');
-}
-
-function closeModal() {
-    document.getElementById('modal-container').classList.remove('show');
-}
-
-let currentGalleryIndex = 0;
-let currentGalleryItems = [];
-
-function showGalleryModal(index, type) {
-    currentGalleryIndex = index;
-    currentGalleryItems = Array.from(document.querySelectorAll(`.gallery-item[data-type="${type}"]`));
-    const item = currentGalleryItems[index];
-    const isImage = item.getAttribute('data-type') === 'foto';
-    const src = item.querySelector(isImage ? 'img' : 'video source').getAttribute('src');
-    const title = item.querySelector('h3').textContent;
-    const modalContent = `
-        <div class="text-center">
-            ${isImage ? `<img src="${src}" alt="${title}" class="w-full h-auto">` : `<video controls class="w-full h-auto"><source src="${src}" type="video/mp4"></video>`}
-            <h3 class="text-white text-lg font-semibold mt-4">${title}</h3>
-        </div>
-    `;
-    const galleryModal = document.getElementById('gallery-modal');
-    const galleryModalContent = document.getElementById('gallery-modal-content');
-    galleryModalContent.innerHTML = modalContent;
-    galleryModal.classList.add('show');
-}
-
-function closeGalleryModal() {
-    const galleryModal = document.getElementById('gallery-modal');
-    galleryModal.classList.remove('show');
-    const video = galleryModal.querySelector('video');
-    if (video) video.pause();
-}
-
-function prevGalleryItem() {
-    currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
-    showGalleryModal(currentGalleryIndex, currentGalleryItems[currentGalleryIndex].getAttribute('data-type'));
-}
-
-function nextGalleryItem() {
-    currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
-    showGalleryModal(currentGalleryIndex, currentGalleryItems[currentGalleryIndex].getAttribute('data-type'));
-}
-
+<script>
 document.addEventListener('DOMContentLoaded', function () {
-    const today = new Date().toISOString().split('T')[0];
-    const visitKey = 'kunjungan_' + today;
-    if (!localStorage.getItem(visitKey)) {
-        localStorage.setItem(visitKey, 'true');
+    const navbar = document.querySelector('nav');
+    const mobileMenuBtn = document.querySelector('button.lg\\:hidden');
+    const mobileMenu = document.querySelector('nav > div > div:last-child > div.lg\\:hidden');
+
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            const isClosed = mobileMenu.classList.contains('max-h-0');
+            mobileMenu.classList.toggle('max-h-0', !isClosed);
+            mobileMenu.classList.toggle('opacity-0', !isClosed);
+            mobileMenu.classList.toggle('max-h-screen', isClosed);
+            mobileMenu.classList.toggle('opacity-100', isClosed);
+        });
     }
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = link.getAttribute('href');
-            if (href.startsWith('#')) {
-                const targetId = href.substring(1);
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    const navMenu = document.querySelector('.lg\\:hidden.transition-all');
-                    if (navMenu && !navMenu.classList.contains('max-h-0')) {
-                        navMenu.classList.add('max-h-0', 'opacity-0');
-                        navMenu.classList.remove('max-h-screen', 'opacity-100');
-                    }
+
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+    });
+
+    document.querySelectorAll('a[href^="#"], a[href*="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href.includes('://') || href.startsWith('javascript:')) return;
+            const targetId = href.includes('#') ? href.split('#')[1] : href.slice(1);
+            if (!targetId) return;
+            const target = document.getElementById(targetId);
+            if (target) {
+                e.preventDefault();
+                const navbarHeight = navbar.offsetHeight;
+                const offsetTop = target.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: offsetTop - navbarHeight - 15,
+                    behavior: 'smooth'
+                });
+                if (mobileMenu && mobileMenu.classList.contains('opacity-100')) {
+                    mobileMenu.classList.add('max-h-0', 'opacity-0');
+                    mobileMenu.classList.remove('max-h-screen', 'opacity-100');
                 }
-            } else {
-                window.location.href = href;
+                history.pushState(null, null, `#${targetId}`);
             }
         });
     });
-    const navToggle = document.querySelector('.lg\\:hidden.p-2.rounded-lg.text-white');
-    const navMenu = document.querySelector('.lg\\:hidden.transition-all');
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-            const isOpen = navMenu.classList.contains('max-h-0');
-            navMenu.classList.toggle('max-h-0', !isOpen);
-            navMenu.classList.toggle('max-h-screen', isOpen);
-            navMenu.classList.toggle('opacity-0', !isOpen);
-            navMenu.classList.toggle('opacity-100', isOpen);
-        });
+
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const target = document.getElementById(targetId);
+        if (target) {
+            setTimeout(() => {
+                const navbarHeight = navbar.offsetHeight;
+                const offsetTop = target.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({
+                    top: offsetTop - navbarHeight - 15,
+                    behavior: 'smooth'
+                });
+            }, 500);
+        }
     }
+
     const testimoniItems = document.querySelectorAll('.testimoni-carousel-item');
     const testimoniDots = document.querySelectorAll('.testimoni-dots button');
     let currentTestimoni = 0;
     let autoPlayInterval = null;
+
     function showTestimoni(index) {
         testimoniItems.forEach((item, i) => {
             item.style.display = i === index ? 'block' : 'none';
             item.style.opacity = i === index ? '1' : '0';
-            item.style.transition = 'opacity 0.5s ease-in-out';
         });
         testimoniDots.forEach((dot, i) => {
             dot.classList.toggle('bg-emerald-600', i === index);
@@ -1183,16 +1000,20 @@ document.addEventListener('DOMContentLoaded', function () {
             dot.classList.toggle('w-3', i !== index);
         });
     }
+
     function nextTestimoni() {
         currentTestimoni = (currentTestimoni + 1) % testimoniItems.length;
         showTestimoni(currentTestimoni);
     }
+
     function startAutoPlay() {
         autoPlayInterval = setInterval(nextTestimoni, 5000);
     }
+
     function stopAutoPlay() {
         clearInterval(autoPlayInterval);
     }
+
     testimoniDots.forEach((dot, i) => {
         dot.addEventListener('click', () => {
             stopAutoPlay();
@@ -1201,29 +1022,24 @@ document.addEventListener('DOMContentLoaded', function () {
             startAutoPlay();
         });
     });
+
     if (testimoniItems.length) {
-        showTestimoni(currentTestimoni);
+        showTestimoni(0);
         startAutoPlay();
-        const testimoniSection = document.querySelector('#testimoni');
-        if (testimoniSection) {
-            testimoniSection.addEventListener('mouseenter', stopAutoPlay);
-            testimoniSection.addEventListener('mouseleave', startAutoPlay);
-        }
+        document.querySelector('#testimoni')?.addEventListener('mouseenter', stopAutoPlay);
+        document.querySelector('#testimoni')?.addEventListener('mouseleave', startAutoPlay);
     }
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-        const button = item.querySelector('button');
-        const content = item.querySelector('.faq-content');
-        const icon = button.querySelector('i');
-        button.addEventListener('click', () => {
+
+    document.querySelectorAll('.faq-item button').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const content = this.nextElementSibling;
+            const icon = this.querySelector('i');
             const isOpen = content.classList.contains('max-h-96');
-            faqItems.forEach(other => {
-                const otherContent = other.querySelector('.faq-content');
-                const otherIcon = other.querySelector('i');
-                otherContent.classList.remove('max-h-96', 'opacity-100');
-                otherContent.classList.add('max-h-0', 'opacity-0');
-                otherIcon.classList.remove('rotate-180');
+            document.querySelectorAll('.faq-content').forEach(c => {
+                c.classList.remove('max-h-96', 'opacity-100');
+                c.classList.add('max-h-0', 'opacity-0');
             });
+            document.querySelectorAll('.faq-item i').forEach(i => i.classList.remove('rotate-180'));
             if (!isOpen) {
                 content.classList.add('max-h-96', 'opacity-100');
                 content.classList.remove('max-h-0', 'opacity-0');
@@ -1231,115 +1047,191 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
     const tabButtons = document.querySelectorAll('.tab-button');
     const galleryItems = document.querySelectorAll('.gallery-item');
-    let currentTab = 'foto';
-    const initialVisibleCount = 3;
+    let currentVisibleCount = 3;
     const loadMoreCount = 3;
-    let currentVisibleCount = initialVisibleCount;
+
     function showGalleryItems() {
         const activeTab = document.querySelector('.tab-button.bg-emerald-600')?.getAttribute('data-tab') || 'foto';
+        galleryItems.forEach(item => item.style.display = 'none');
+        let count = 0;
         galleryItems.forEach(item => {
-            item.style.display = 'none';
-        });
-        let visibleCount = 0;
-        galleryItems.forEach(item => {
-            if (item.getAttribute('data-type') === activeTab && visibleCount < currentVisibleCount) {
+            if (item.dataset.type === activeTab && count < currentVisibleCount) {
                 item.style.display = 'block';
-                visibleCount++;
+                count++;
             }
         });
-        const totalItemsOfActiveType = document.querySelectorAll(`.gallery-item[data-type="${activeTab}"]`).length;
-        const loadMoreButton = document.getElementById('load-more-gallery');
-        if (currentVisibleCount >= totalItemsOfActiveType) {
-            loadMoreButton.style.display = 'none';
-        } else {
-            loadMoreButton.style.display = 'inline-flex';
-        }
+        const total = document.querySelectorAll(`.gallery-item[data-type="${activeTab}"]`).length;
+        document.getElementById('load-more-gallery').style.display = currentVisibleCount >= total ? 'none' : 'inline-flex';
     }
-    tabButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            tabButtons.forEach(btn => {
-                btn.classList.remove('bg-emerald-600', 'text-white');
-                btn.classList.add('text-gray-600', 'hover:text-emerald-600');
+
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            tabButtons.forEach(b => {
+                b.classList.remove('bg-emerald-600', 'text-white');
+                b.classList.add('text-gray-600', 'hover:text-emerald-600');
             });
-            button.classList.add('bg-emerald-600', 'text-white');
-            button.classList.remove('text-gray-600', 'hover:text-emerald-600');
-            currentTab = button.getAttribute('data-tab');
-            currentVisibleCount = initialVisibleCount;
+            this.classList.add('bg-emerald-600', 'text-white');
+            this.classList.remove('text-gray-600', 'hover:text-emerald-600');
+            currentVisibleCount = 3;
             showGalleryItems();
         });
     });
-    galleryItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            const type = item.getAttribute('data-type');
-            showGalleryModal(index, type);
-        });
+
+    galleryItems.forEach((item, i) => {
+        item.addEventListener('click', () => showGalleryModal(i, item.dataset.type));
     });
-    const loadMoreButton = document.getElementById('load-more-gallery');
-    if (loadMoreButton) {
-        loadMoreButton.addEventListener('click', () => {
-            currentVisibleCount += loadMoreCount;
-            showGalleryItems();
-        });
-    }
+
+    document.getElementById('load-more-gallery')?.addEventListener('click', () => {
+        currentVisibleCount += loadMoreCount;
+        showGalleryItems();
+    });
+
     showGalleryItems();
-    document.addEventListener('keydown', (e) => {
-        if (document.getElementById('gallery-modal').classList.contains('show')) {
-            if (e.key === 'ArrowLeft') prevGalleryItem();
-            if (e.key === 'ArrowRight') nextGalleryItem();
-            if (e.key === 'Escape') closeGalleryModal();
-        }
+
+    document.addEventListener('keydown', e => {
+        if (!document.getElementById('gallery-modal').classList.contains('show')) return;
+        if (e.key === 'ArrowLeft') prevGalleryItem();
+        if (e.key === 'ArrowRight') nextGalleryItem();
+        if (e.key === 'Escape') closeGalleryModal();
     });
-    const reservasiForm = document.getElementById('reservasi-form');
-    if (reservasiForm) {
-        const messageInput = reservasiForm.querySelector('textarea[name="message"]');
-        const charCount = reservasiForm.querySelector('.text-right.text-xs.text-gray-500');
-        messageInput.addEventListener('input', () => {
-            const count = messageInput.value.length;
-            charCount.textContent = `${count}/500 karakter`;
-        });
-        reservasiForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            openReservationModal();
-        });
-    }
-    const detailReservasiForm = document.getElementById('detail-reservasi-form');
-    if (detailReservasiForm) {
-        const modalMessageInput = detailReservasiForm.querySelector('textarea[name="message"]');
-        const modalCharCount = detailReservasiForm.querySelector('.text-right.text-xs.text-gray-500');
-        modalMessageInput.addEventListener('input', () => {
-            const count = modalMessageInput.value.length;
-            modalCharCount.textContent = `${count}/500 karakter`;
-        });
-        const glampingSelect = detailReservasiForm.querySelector('select[name="glampingId"]');
-        const roomCountInput = detailReservasiForm.querySelector('input[name="roomCount"]');
-        const stayDurationInput = detailReservasiForm.querySelector('input[name="stayDuration"]');
-        glampingSelect.addEventListener('change', calculateGlampingRate);
-        roomCountInput.addEventListener('input', calculateGlampingRate);
-        stayDurationInput.addEventListener('input', calculateGlampingRate);
-        detailReservasiForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            calculateGlampingRate();
-            submitReservationForm();
-        });
-    }
-    window.addEventListener('scroll', () => {
-        const navbar = document.querySelector('nav');
-        if (window.scrollY > 50) {
-            navbar.classList.add('navbar-scrolled');
-        } else {
-            navbar.classList.remove('navbar-scrolled');
-        }
+
+    document.getElementById('reservasi-form')?.addEventListener('submit', e => {
+        e.preventDefault();
+        openReservationModal();
     });
-    const facilityButtons = document.querySelectorAll('button[onclick^="showFacilityModal"]');
-    facilityButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const facilityId = button.getAttribute('onclick').match(/\d+/)[0];
-            showFacilityModal(facilityId);
+
+    document.getElementById('detail-reservasi-form')?.addEventListener('submit', e => {
+        e.preventDefault();
+        calculateGlampingRate();
+        submitReservationForm();
+    });
+
+    document.querySelectorAll('textarea[name="message"]').forEach(textarea => {
+        const counter = textarea.closest('div').querySelector('.text-right.text-xs.text-gray-500');
+        textarea.addEventListener('input', () => {
+            counter.textContent = `${textarea.value.length}/500 karakter`;
         });
+    });
+
+    document.querySelectorAll('select[name="glampingId"], input[name="roomCount"], input[name="stayDuration"]').forEach(el => {
+        el.addEventListener('input', calculateGlampingRate);
+        el.addEventListener('change', calculateGlampingRate);
     });
 });
-        </script>
+
+let currentGalleryIndex = 0;
+let currentGalleryItems = [];
+
+function openReservationModal() {
+    document.getElementById('modal-name').value = document.getElementById('initial-name').value;
+    document.getElementById('modal-phone').value = document.getElementById('initial-phone').value;
+    document.getElementById('modal-checkIn').value = document.getElementById('initial-checkIn').value;
+    document.getElementById('modal-checkOut').value = document.getElementById('initial-checkOut').value;
+    document.getElementById('modal-message').value = document.getElementById('initial-message').value;
+    document.getElementById('reservationModal').classList.add('show');
+    calculateGlampingRate();
+}
+
+function calculateGlampingRate() {
+    const select = document.querySelector('select[name="glampingId"]');
+    const room = document.querySelector('input[name="roomCount"]');
+    const stay = document.querySelector('input[name="stayDuration"]');
+    const rateInput = document.getElementById('glampingRate');
+    const price = select.selectedOptions[0] ? Number(select.selectedOptions[0].dataset.price) || 0 : 0;
+    const total = price * (Number(room?.value) || 0) * (Number(stay?.value) || 0);
+    rateInput.value = total > 0 ? total : '';
+}
+
+function submitReservationForm() {
+    const form = document.getElementById('detail-reservasi-form');
+    const data = new FormData(form);
+    const select = form.querySelector('select[name="glampingId"]');
+    const opt = select.selectedOptions[0];
+    const title = opt?.dataset.title || 'Tidak dipilih';
+    const type = opt?.dataset.type || '';
+    const price = opt?.dataset.price || '0';
+
+    let msg = `Halo, saya ingin reservasi glamping:\n\n`;
+    msg += `Nama: ${data.get('name')}\n`;
+    msg += `No. WhatsApp: ${data.get('phone')}\n`;
+    msg += `Alamat: ${data.get('address')}\n`;
+    msg += `Check-in: ${data.get('checkIn')}\n`;
+    msg += `Check-out: ${data.get('checkOut')}\n`;
+    msg += `Lama Menginap: ${data.get('stayDuration')} hari\n`;
+    msg += `Jumlah Room: ${data.get('roomCount')}\n`;
+    msg += `Kamar: ${title} (${type}, Rp ${Number(price).toLocaleString('id-ID')}/malam)\n`;
+    msg += `Dewasa: ${data.get('adultCount')}\n`;
+    msg += `Anak: ${data.get('childCount') || 'Tidak ada'}\n`;
+    msg += `Extra Bed: ${data.get('extraBed')}\n`;
+    msg += `Rombongan: ${data.get('groupType') || '-'}\n`;
+    msg += `Kendaraan: ${data.get('vehicleCount') || '0'}\n`;
+    msg += `Instagram: ${data.get('instagram') || '-'}\n`;
+    msg += `Tarif: Rp ${Number(data.get('glampingRate')).toLocaleString('id-ID')}\n`;
+    msg += `DP: Rp ${Number(data.get('downPayment')).toLocaleString('id-ID')}\n`;
+    msg += `Jeep Adventure: ${data.get('jeepAdventure')}\n`;
+    msg += `BBQ Grill: ${data.get('bbqGrill')}\n`;
+    msg += `Pesan: ${data.get('message') || 'Tidak ada'}\n\n`;
+    msg += `Catatan: Foto buku nikah akan dikirim via WhatsApp (khusus pasutri).`;
+
+    window.open(`https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=${encodeURIComponent(msg)}`, '_blank');
+    closeReservationModal();
+}
+
+function closeReservationModal() {
+    document.getElementById('reservationModal').classList.remove('show');
+}
+
+function showFacilityModal(id) {
+    const facilities = JSON.parse('{{ json_encode($facilities) }}'.replace(/&quot;/g, '"'));
+    const facility = facilities.find(f => f.id === parseInt(id));
+    if (!facility) return;
+    const html = `
+        <div class="space-y-6">
+            <img src="${facility.primaryImage?.file_path ? '/storage/' + facility.primaryImage.file_path : '/images/placeholder.jpg'}" class="w-full h-64 object-cover rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800">${facility.name}</h3>
+            <p class="text-gray-600">${facility.description}</p>
+            ${facility.images?.length ? `<div class="grid grid-cols-2 gap-4">${facility.images.map(i => `<img src="/storage/${i.file_path}" class="w-full h-32 object-cover rounded-lg">`).join('')}</div>` : ''}
+        </div>`;
+    document.getElementById('facility-modal-content').innerHTML = html;
+    document.getElementById('facility-modal').classList.add('show');
+}
+
+function closeFacilityModal() {
+    document.getElementById('facility-modal').classList.remove('show');
+}
+
+function showGalleryModal(index, type) {
+    currentGalleryIndex = index;
+    currentGalleryItems = Array.from(document.querySelectorAll(`.gallery-item[data-type="${type}"]`));
+    const item = currentGalleryItems[index];
+    const isImage = type === 'foto';
+    const src = isImage ? item.querySelector('img').src : item.querySelector('source').src;
+    const title = item.querySelector('h3')?.textContent || '';
+    document.getElementById('gallery-modal-content').innerHTML = `
+        <div class="text-center">
+            ${isImage ? `<img src="${src}" class="max-w-full max-h-full">` : `<video controls class="max-w-full max-h-full"><source src="${src}" type="video/mp4"></video>`}
+            <h3 class="text-white text-lg font-semibold mt-4">${title}</h3>
+        </div>`;
+    document.getElementById('gallery-modal').classList.add('show');
+}
+
+function closeGalleryModal() {
+    document.getElementById('gallery-modal').classList.remove('show');
+    const video = document.querySelector('#gallery-modal video');
+    if (video) video.pause();
+}
+
+function prevGalleryItem() {
+    currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
+    showGalleryModal(currentGalleryIndex, currentGalleryItems[currentGalleryIndex].dataset.type);
+}
+
+function nextGalleryItem() {
+    currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
+    showGalleryModal(currentGalleryIndex, currentGalleryItems[currentGalleryIndex].dataset.type);
+}
+</script>
 </html>

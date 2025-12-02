@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -147,17 +148,21 @@
 <body class="bg-neutral-50 min-h-screen text-neutral-800 flex">
   <!-- Sidebar -->
   <aside class="w-80 sidebar-glass shadow-soft flex flex-col fixed inset-y-0 z-10">
-        <div class="p-6 border-b border-neutral-200/
-        50 flex items-center">
-            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-400 flex items-center justify-center shadow-soft mr-3">
-               <img src="{{ asset('storage/' . $setting->logo) }}" 
-                                alt="Hayya Admin Logo" 
-                                class="h-6 w-12 object-cover rounded-full">
-            </div>
-            <h1 class="text-2xl font-semibold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
-                Hayya Admin
-            </h1>
-        </div>
+  <div class="p-6 border-b  border-neutral-200/50 flex items-center">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-400 flex items-center justify-center shadow-soft mr-3">
+          <img src="{{ asset('storage/' . $setting->logo) }}" 
+              alt="Hayya Admin Logo" 
+              class="h-10 w-10 object-cover rounded-md">
+      </div>
+      <div class="flex flex-col">
+          <h1 class="text-2xl font-semibold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent leading-none">
+              Hayya Admin
+          </h1>
+          <span class="text-[10px] text-emerald-600 font-medium tracking-widest uppercase mt-0.5">
+              Administrasi Utama Hayya 
+          </span>
+      </div>
+  </div>
         <nav class="flex-1 p-4 space-y-1 mt-2">
             <a href="{{ route('admin.dashboard') }}" class="nav-item flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.dashboard') ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'hover:bg-emerald-50' }}">
                 <div class="w-9 h-9 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-xl mr-3 shadow-sm">
@@ -201,6 +206,13 @@
                 </div>
                 <span class="font-medium">FAQ</span>
             </a>
+            <a href="{{ route('admin.users.index') }}" 
+                class="nav-item flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.users.*') ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'hover:bg-emerald-50' }}">
+                  <div class="w-9 h-9 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-xl mr-3 shadow-sm">
+                      <i class="fa-solid fa-users text-sm"></i>
+                  </div>
+                  <span class="font-medium">Pengguna</span>
+              </a>
             <a href="{{ route('admin.settings.index') }}" class="nav-item flex items-center px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.settings.index') ? 'bg-emerald-100 text-emerald-700 font-semibold' : 'hover:bg-emerald-50' }}">
                 <div class="w-9 h-9 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-xl mr-3 shadow-sm">
                     <i class="fa-solid fa-gear text-sm"></i>
@@ -314,6 +326,8 @@
         }
       });
     });
+
+    
   </script>
 </body>
 </html>

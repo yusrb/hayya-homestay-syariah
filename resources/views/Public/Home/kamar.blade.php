@@ -2,702 +2,366 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $setting->name ?? 'Hayya Syariah Homestay' }} - Kamar Glamping Syariah</title>
-    <meta name="description" content="Jelajahi pilihan kamar glamping syariah premium di Hayya Syariah Glamping dengan fasilitas lengkap untuk keluarga Muslim.">
-    <meta name="keywords" content="glamping syariah, kamar halal, penginapan islami, akomodasi muslim, mushola pribadi">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg">
+    <title>{{ $setting->name ?? 'Hayya Syariah Glamping' }} - Kamar Glamping Syariah</title>
+    <meta name="description" content="Glamping syariah premium di Lembang dengan mushola pribadi, fasilitas halal, dan pemandangan alam indah untuk keluarga Muslim.">
+    <meta name="keywords" content="glamping syariah, penginapan halal, lembang, bandung, mushola pribadi">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.min.css">
     <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 50;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .modal.show {
-            display: flex;
-        }
-        .navbar-scrolled {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .navbar-scrolled .text-white {
-            color: #047857;
-        }
-        .navbar-scrolled .hover\:text-emerald-600 {
-            color: #047857;
-        }
-        .navbar-scrolled .hover\:text-emerald-600:hover {
-            color: #065f46;
-        }
-        .navbar-scrolled .border-emerald-600 {
-            border-color: #10b981;
-        }
-        .navbar-scrolled .text-emerald-600 {
-            color: #10b981;
-        }
-        .navbar-scrolled .hover\:bg-emerald-600:hover {
-            background-color: #10b981;
-        }
-        .navbar-scrolled .hover\:text-white:hover {
-            color: #ffffff;
-        }
-        .navbar-scrolled .bg-emerald-600 {
-            background-color: #10b981;
-        }
-        .navbar-scrolled .text-white {
-            color: #404040;
-        }
-        .navbar-scrolled .hubungi {
-            color: #10b981;
-            border: 1px solid #10b981;
-        }
-        .navbar-scrolled .reservasi {
-            color: #ffffff;
-        }
-        .navbar-scrolled .ri-tent-line {
-            color: #ffffff;
-        }
-
-        .hero-section {
-            background-image: url('/storage/images/gallery/img/galeri1.jpg'); 
-            
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-
-            min-height: 100vh;
-        }
-        .section-title {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 3rem;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            
-            min-height: 70vh; 
-        }
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, #047857, #10b981);
-            border-radius: 2px;
-        }
-        .glamping-card {
-            transition: all 0.3s ease;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            background: #ffffff;
-        }
-        .glamping-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .glamping-card img {
-            transition: transform 0.5s ease;
-        }
-        .glamping-card:hover img {
-            transform: scale(1.05);
-        }
-        .status-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 10;
-        }
-        .feature-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-            border-radius: 16px;
-            padding: 2rem;
-            height: 100%;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(4, 120, 87, 0.1);
-        }
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: rgba(4, 120, 87, 0.2);
-        }
-        .filter-btn {
-            transition: all 0.3s ease;
-            border-radius: 30px;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-        .filter-btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        .filter-btn:hover:before {
-            left: 100%;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #047857 0%, #10b981 100%);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 12px 24px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(4, 120, 87, 0.2);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(4, 120, 87, 0.3);
-        }
-        .btn-outline {
-            background: transparent;
-            color: #047857;
-            border: 2px solid #047857;
-            border-radius: 30px;
-            padding: 10px 22px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-outline:hover {
-            background: #047857;
-            color: white;
-        }
-        footer {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-        }
-        .footer-links a {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        .footer-links a:after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #10b981;
-            transition: width 0.3s ease;
-        }
-        .footer-links a:hover:after {
-            width: 100%;
-        }
-        .mobile-menu {
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.4s ease;
-            overflow: hidden;
-        }
-        .mobile-menu.open {
-            max-height: 500px;
-            opacity: 1;
-        }
-        .scrollbar-thin {
-            scrollbar-width: thin;
-        }
-        .scrollbar-thumb-emerald-600 {
-            scrollbar-color: #047857 #e5e7eb;
-        }
-        .scrollbar-track-gray-100 {
-            scrollbar-color: #047857 #f3f4f6;
-        }
-        .glamping-gallery::-webkit-scrollbar {
-            height: 8px;
-        }
-        .glamping-gallery::-webkit-scrollbar-track {
-            background: #f3f4f6;
-            border-radius: 8px;
-        }
-        .glamping-gallery::-webkit-scrollbar-thumb {
-            background: #047857;
-            border-radius: 8px;
-        }
-        .glamping-gallery::-webkit-scrollbar-thumb:hover {
-            background: #065f46;
-        }
-        @media (max-width: 768px) {
-            .hero-section {
-                background-attachment: scroll;
-            }
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-        }
+        .hero-section{background:linear-gradient(rgba(0,0,0,0.68),rgba(0,0,0,0.68)),url('/storage/images/gallery/img/galeri1.jpg') center/cover no-repeat fixed;min-height:100vh}
+        @media(max-width:768px){.hero-section{background-attachment:scroll}}
+        .navbar-scrolled{background:rgba(255,255,255,0.98);backdrop-filter:blur(12px);box-shadow:0 4px 30px rgba(0,0,0,0.12)}
+        .navbar-scrolled .text-white{color:#065f46 !important}
+        .navbar-scrolled .hover\:text-emerald-600:hover{color:#10b981 !important}
+        .navbar-scrolled .hubungi{color:#10b981 !important;border-color:#10b981 !important}
+        .navbar-scrolled .reservasi{background:#10b981 !important}
+        .glamping-card{transition:all .4s ease}
+        .glamping-card:hover{transform:translateY(-12px);box-shadow:0 30px 60px rgba(0,0,0,0.18)}
+        .glamping-card:hover img{transform:scale(1.08)}
+        .modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem}
+        .modal.show{display:flex}
+        .modal-content{background:white;border-radius:28px;max-width:1100px;width:100%;max-height:95vh;overflow-y:auto;box-shadow:0 50px 100px rgba(0,0,0,0.35)}
+        .filter-btn.active{background:#10b981;color:white;box-shadow:0 8px 25px rgba(16,185,129,0.45)}
+        .mobile-menu{transition:all .4s ease;max-height:0;opacity:0;overflow:hidden}
+        .mobile-menu.open{max-height:800px;opacity:1}
     </style>
 </head>
-<body>
-    <div id="root" class="min-h-screen">
-        <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-            <div class="container mx-auto px-4">
-                <div class="flex items-center justify-between h-20">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center overflow-hidden">
-                            <img src="{{ asset('storage/' . $setting->logo) }}" alt="Hayya Admin Logo" class="h-12 w-12 object-cover rounded-full">
-                        </div>
-                        <div>
-                            <div class="font-bold text-lg text-white" style="font-family: Amiri, serif;">
-                                {{ $setting->name ?? 'Hayya Syariah' }}
-                            </div>
-                            <div class="text-sm relative bottom-1 text-emerald-300">Glamping Islami</div>
-                        </div>
+<body class="bg-gray-50">
+<div id="root">
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 overflow-hidden rounded-full">
+                        <img src="{{ asset('storage/'.$setting->logo) }}" alt="Logo" class="w-full h-full object-cover">
                     </div>
-                    <div class="hidden lg:flex items-center space-x-8">
-                        <a href="{{ route('home.index') }}#hero" class="font-medium hover:text-emerald-600 text-white nav-link">Home</a>
-                        <a href="{{ route('home.kamar') }}" class="font-medium text-white hover:text-emerald-600 nav-link">Kamar</a>
-                        <a href="{{ route('home.index') }}#fasilitas" class="font-medium hover:text-emerald-600 text-white nav-link">Fasilitas</a>
-                        <a href="{{ route('home.index') }}#galeri" class="font-medium hover:text-emerald-600 text-white nav-link">Galeri</a>
-                        <a href="{{ route('home.index') }}#tentang" class="font-medium hover:text-emerald-600 text-white nav-link">Tentang</a>
-                    </div>
-                    <div class="hidden lg:flex items-center space-x-4">
-                        <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}"
-                            class="hubungi font-medium rounded-lg flex items-center border-2 border-white text-white hover:bg-white hover:text-emerald-800 px-6 py-3">
-                            <i class="ri-phone-line mr-2"></i>Hubungi
-                        </a>
-                        <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo, saya ingin reservasi glamping syariah."
-                            class="reservasi font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3">
-                            <i class="ri-whatsapp-line mr-2"></i>Reservasi
-                        </a>
-                    </div>
-                    <button class="lg:hidden p-2 rounded-lg text-white hover:bg-white/10">
-                        <i class="text-xl ri-menu-line"></i>
-                    </button>
-                </div>
-                <div class="lg:hidden transition-all duration-300 overflow-hidden max-h-0 opacity-0">
-                    <div class="py-4 space-y-4 bg-white/95 rounded-2xl mt-2 shadow-xl">
-                        <a href="{{ route('home.index') }}#hero" class="block px-6 py-2 text-gray-700 hover:text-emerald-600 nav-link">Home</a>
-                        <a href="{{ route('home.kamar') }}" class="block px-6 py-2 text-emerald-600 font-medium nav-link">Kamar</a>
-                        <a href="{{ route('home.index') }}#fasilitas" class="block px-6 py-2 text-gray-700 hover:text-emerald-600 nav-link">Fasilitas</a>
-                        <a href="{{ route('home.index') }}#galeri" class="block px-6 py-2 text-gray-700 hover:text-emerald-600 nav-link">Galeri</a>
-                        <a href="{{ route('home.index') }}#tentang" class="block px-6 py-2 text-gray-700 hover:text-emerald-600 nav-link">Tentang</a>
-                        <div class="px-6 py-2 space-y-3">
-                            <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}"
-                                class="font-medium rounded-lg flex items-center border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-6 py-3 w-full">
-                                <i class="ri-phone-line mr-2"></i>Hubungi Kami
-                            </a>
-                            <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo, saya ingin reservasi glamping syariah."
-                                class="font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 w-full">
-                                <i class="ri-whatsapp-line mr-2"></i>Reservasi Sekarang
-                            </a>
-                        </div>
+                    <div>
+                        <div class="font-bold text-lg text-white">{{ $setting->name ?? 'Hayya Syariah' }}</div>
+                        <div class="text-sm text-emerald-300">Glamping Islami</div>
                     </div>
                 </div>
-            </div>
-        </nav>
-
-        <section class="hero-section pt-32 pb-20 flex items-center justify-center text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6" style="font-family: Amiri, serif;">Kamar Glamping Syariah</h1>
-                <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-8 leading-relaxed">Pilih akomodasi premium kami yang dirancang khusus untuk kenyamanan keluarga Muslim dengan fasilitas syariah lengkap.</p>
-                <div class="flex justify-center space-x-4">
-                    <a href="#glamping" class="btn-primary font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3">
-                        <i class="ri-eye-line mr-2"></i>Lihat Kamar
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="{{ route('home.index') }}" class="font-medium text-white hover:text-emerald-400 transition">Home</a>
+                    <a href="{{ route('home.kamar') }}" class="font-medium text-emerald-400">Kamar</a>
+                    <a href="{{ route('home.index') }}#fasilitas" class="font-medium text-white hover:text-emerald-400 transition">Fasilitas</a>
+                    <a href="{{ route('home.index') }}#galeri" class="font-medium text-white hover:text-emerald-400 transition">Galeri</a>
+                    <a href="{{ route('home.index') }}#tentang" class="font-medium text-white hover:text-emerald-400 transition">Tentang</a>
+                </div>
+                <div class="hidden lg:flex items-center space-x-4">
+                    <a href="tel:{{ $setting->phone ?? '+6281234567890' }}" class="hubungi font-medium rounded-lg flex items-center border-2 border-white text-white hover:bg-white hover:text-emerald-800 px-6 py-3 transition">
+                        <i class="ri-phone-line mr-2"></i>Hubungi
                     </a>
-                    <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo, saya ingin reservasi glamping syariah."
-                        class="btn-outline font-medium rounded-lg flex items-center border-2 border-white text-white hover:bg-white hover:text-emerald-800 px-6 py-3">
+                    <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo,%20saya%20ingin%20reservasi" class="reservasi font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 transition">
                         <i class="ri-whatsapp-line mr-2"></i>Reservasi
                     </a>
                 </div>
+                <button id="menu-toggle" class="lg:hidden p-3 rounded-lg text-white hover:bg-white/10">
+                    <i class="ri-menu-line text-2xl"></i>
+                </button>
             </div>
-        </section>
-
-        <section class="py-20 bg-white" id="glamping">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-16">
-                    <div class="inline-flex items-center bg-emerald-100 text-emerald-700 rounded-full px-4 py-2 mb-4 font-medium">
-                        <i class="ri-tent-line mr-2"></i>
-                        <span>Glamping Kami</span>
-                    </div>
-                    <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800" style="font-family: Amiri, serif;">
-                        Pilih <span class="text-emerald-600">Glamping Favorit</span>
-                    </h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-4">Temukan glamping syariah premium dengan fasilitas lengkap untuk keluarga Muslim.</p>
-                </div>
-                <div class="mb-12 flex flex-wrap gap-4 justify-center">
-                    <button class="filter-btn active bg-emerald-600 text-white px-6 py-3 font-medium rounded-lg">Semua</button>
-                    <button class="filter-btn bg-white text-emerald-600 border border-emerald-200 px-6 py-3 font-medium rounded-lg" data-filter="available">Tersedia</button>
-                    <button class="filter-btn bg-white text-emerald-600 border border-emerald-200 px-6 py-3 font-medium rounded-lg" data-filter="standard">Standard</button>
-                    <button class="filter-btn bg-white text-emerald-600 border border-emerald-200 px-6 py-3 font-medium rounded-lg" data-filter="deluxe">Deluxe</button>
-                    <button class="filter-btn bg-white text-emerald-600 border border-emerald-200 px-6 py-3 font-medium rounded-lg" data-filter="family">Keluarga</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 glamping-grid">
-                    @forelse($glampings as $glamping)
-                    <div class="glamping-card" data-status="{{ $glamping->status }}" data-type="{{ $glamping->type }}">
-                        <div class="relative overflow-hidden">
-                            <img alt="{{ $glamping->title }}" class="w-full h-64 object-cover"
-                                 src="{{ $glamping->images->first() ? asset('storage/' . $glamping->images->first()->image_path) : asset('images/placeholder.jpg') }}">
-                            <div class="status-badge {{ $glamping->status == 'available' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white' }}">
-                                {{ $glamping->status == 'available' ? 'Tersedia' : 'Tidak Tersedia' }}
-                            </div>
-                            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent text-white">
-                                <h3 class="text-xl font-bold mb-2" style="font-family: Amiri, serif;">{{ $glamping->title }}</h3>
-                                <div class="flex items-center text-sm opacity-90">
-                                    <i class="ri-map-pin-line mr-1"></i>
-                                    <span>Lembang, Bandung</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <div class="flex items-center space-x-2 text-gray-600">
-                                    <i class="ri-user-line text-emerald-600"></i>
-                                    <span>{{ $glamping->capacity }} Tamu</span>
-                                </div>
-                                <div class="flex items-center space-x-2 text-gray-600">
-                                    <i class="ri-hotel-bed-line text-emerald-600"></i>
-                                    <span>{{ $glamping->beds }} Tempat Tidur</span>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-2xl font-bold text-emerald-600">Rp {{ number_format($glamping->price, 0, ',', '.') }} <span class="text-sm font-normal text-gray-500">/ malam</span></span>
-                                <div class="flex text-amber-500">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="ri-star-fill {{ $i <= $glamping->rating ? '' : 'opacity-30' }}"></i>
-                                    @endfor
-                                </div>
-                            </div>
-                            <button onclick="showGlampingModal({{ json_encode($glamping->toArray()) }})" class="font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 w-full">
-                                <i class="ri-eye-line mr-2"></i> Lihat Detail
-                            </button>
-                        </div>
-                    </div>
-                    @empty
-                    <div class="col-span-full text-center py-12">
-                        <div class="max-w-md mx-auto">
-                            <i class="ri-tent-line text-6xl text-gray-300 mb-4"></i>
-                            <h3 class="text-xl font-bold text-gray-500 mb-2" style="font-family: Amiri, serif;">Belum ada glamping tersedia</h3>
-                            <p class="text-gray-400">Kami sedang mempersiapkan pengalaman terbaik untuk Anda.</p>
-                        </div>
-                    </div>
-                    @endforelse
-                </div>
-                @if($glampings->hasPages())
-                <div class="text-center mt-12">
-                    <div class="flex justify-center space-x-2">
-                        @if($glampings->onFirstPage())
-                        <span class="px-4 py-2 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
-                            <i class="ri-arrow-left-s-line"></i>
-                        </span>
-                        @else
-                        <a href="{{ $glampings->previousPageUrl() }}" class="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-all">
-                            <i class="ri-arrow-left-s-line"></i>
+            <div id="mobile-menu" class="lg:hidden mobile-menu">
+                <div class="bg-white/95 backdrop-blur rounded-2xl shadow-2xl mt-2 py-6 px-6 space-y-4">
+                    <a href="{{ route('home.index') }}" class="block text-gray-700 hover:text-emerald-600 font-medium py-2">Home</a>
+                    <a href="{{ route('home.kamar') }}" class="block text-emerald-600 font-bold py-2">Kamar</a>
+                    <a href="{{ route('home.index') }}#fasilitas" class="block text-gray-700 hover:text-emerald-600 font-medium py-2">Fasilitas</a>
+                    <a href="{{ route('home.index') }}#galeri" class="block text-gray-700 hover:text-emerald-600 font-medium py-2">Galeri</a>
+                    <a href="{{ route('home.index') }}#tentang" class="block text-gray-700 hover:text-emerald-600 font-medium py-2">Tentang</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}" class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-medium">
+                            <i class="ri-whatsapp-line mr-2"></i> Reservasi WhatsApp
                         </a>
-                        @endif
-                        @if($glampings->hasMorePages())
-                        <a href="{{ $glampings->nextPageUrl() }}" class="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-all">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </a>
-                        @else
-                        <span class="px-4 py-2 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </span>
-                        @endif
                     </div>
                 </div>
-                @endif
-            </div>
-        </section>
-
-        <section class="py-20 bg-gradient-to-br from-emerald-50 to-white">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-16">
-                    <div class="inline-flex items-center bg-amber-100 text-amber-700 rounded-full px-4 py-2 mb-4 font-medium">
-                        <i class="ri-information-line mr-2"></i>
-                        <span>Mengapa Memilih Kami</span>
-                    </div>
-                    <h2 class="section-title text-4xl md:text-5xl font-bold text-gray-800" style="font-family: Amiri, serif;">
-                        Keunggulan <span class="text-emerald-600">Kamar Syariah</span>
-                    </h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-4">Nikmati pengalaman menginap yang nyaman, halal, dan penuh berkah di tengah alam indah.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="feature-card">
-                        <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
-                            <i class="ri-shield-check-line text-3xl text-emerald-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-4" style="font-family: Amiri, serif;">100% Syariah Compliant</h3>
-                        <p class="text-gray-600 leading-relaxed">Semua kamar dirancang sesuai prinsip Islam dengan mushola pribadi, arah kiblat, dan fasilitas halal lengkap.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
-                            <i class="ri-leaf-line text-3xl text-amber-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-4" style="font-family: Amiri, serif;">Ramah Lingkungan</h3>
-                        <p class="text-gray-600 leading-relaxed">Material eco-friendly dan desain yang menyatu dengan alam pegunungan untuk pengalaman yang lebih dekat dengan alam.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
-                            <i class="ri-star-line text-3xl text-emerald-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-4" style="font-family: Amiri, serif;">Fasilitas Premium</h3>
-                        <p class="text-gray-600 leading-relaxed">AC, WiFi cepat, kamar mandi dalam, kitchenette, dan view kebun teh yang menakjubkan dari setiap kamar.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-16 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4" style="font-family: Amiri, serif;">Siap Mengalami Pengalaman Glamping Syariah?</h2>
-                <p class="text-xl max-w-2xl mx-auto mb-8 opacity-90">Reservasi sekarang dan nikmati kenyamanan akomodasi halal dengan pemandangan alam terbaik.</p>
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo, saya ingin reservasi glamping syariah."
-                        class="font-medium rounded-lg flex items-center bg-white text-emerald-700 hover:bg-gray-100 px-6 py-3">
-                        <i class="ri-whatsapp-line mr-2"></i>Reservasi via WhatsApp
-                    </a>
-                    <a href="tel:{{ $setting->whatsapp_number ?? '+6281234567890' }}"
-                        class="font-medium rounded-lg flex items-center border-2 border-white text-white hover:bg-white hover:text-emerald-700 px-6 py-3">
-                        <i class="ri-phone-line mr-2"></i>Hubungi Kami
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <footer class="bg-gray-900 text-white">
-            <div class="container mx-auto px-4 py-20">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                    <div>
-                        <h3 class="text-2xl font-bold mb-4" style="font-family: Amiri, serif;">
-                            {{ $setting->name ?? 'Hayya Syariah Glamping' }}
-                        </h3>
-                        <p class="text-gray-400 text-justify leading-relaxed">
-                            {{ $setting->description ?? 'Glamping syariah pertama di Indonesia, harmonis dengan alam dan nilai Islami.' }}
-                        </p>
-                        <div class="flex space-x-3 mt-4">
-                            <a href="#" class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-all duration-300">
-                                <i class="ri-instagram-line text-white"></i>
-                            </a>
-                            <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}"
-                                class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-all duration-300">
-                                <i class="ri-whatsapp-line text-white"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-bold mb-6 text-emerald-300">Quick Links</h4>
-                        <ul class="space-y-3">
-                            <li><a href="{{ route('home.index') }}#tentang" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Tentang Kami</a></li>
-                            <li><a href="{{ route('home.index') }}#fasilitas" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Fasilitas</a></li>
-                            <li><a href="{{ route('home.kamar') }}" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Kamar</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-bold mb-6 text-emerald-300">Kontak</h4>
-                        <div class="space-y-4 text-gray-400 text-sm">
-                            <div class="flex items-start space-x-3">
-                                <i class="ri-map-pin-line text-emerald-400 mt-1"></i>
-                                <div>{{ $setting->address ?? 'Jl. Raya Lembang No. 123, Desa Cikole, Lembang, Bandung Barat 40391' }}</div>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <i class="ri-whatsapp-line text-emerald-400"></i>
-                                <div>{{ $setting->whatsapp_number ?? '+62 812-3456-7890' }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-bold mb-6 text-emerald-300">Layanan</h4>
-                        <ul class="space-y-3 text-gray-400 text-sm">
-                            <li class="flex items-center space-x-2">
-                                <i class="ri-check-line text-emerald-400"></i>
-                                <span>Glamping Syariah</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="ri-check-line text-emerald-400"></i>
-                                <span>Halal Food & Beverage</span>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <i class="ri-check-line text-emerald-400"></i>
-                                <span>Alam Asri & Ramah Lingkungan</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800">
-                <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm space-y-3 md:space-y-0">
-                    <div>© 2025 Hayya Syariah Glamping. All rights reserved.</div>
-                    <div class="flex space-x-6">
-                        <a href="#" class="hover:text-emerald-300 transition-colors duration-200">Privacy Policy</a>
-                        <a href="#" class="hover:text-emerald-300 transition-colors duration-200">Terms of Service</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <div id="modal-container" class="modal">
-            <div class="modal-content">
-                <div id="modal-inner"></div>
             </div>
         </div>
+    </nav>
 
-        <script>
-            function showGlampingModal(glamping) {
-                let modalContent = `
+    <section class="hero-section flex items-center justify-center text-center text-white">
+        <div class="container mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">Kamar Glamping Syariah</h1>
+            <p class="text-xl md:text-2xl max-w-4xl mx-auto mb-10 opacity-95 leading-relaxed">
+                Pengalaman menginap halal nan mewah dengan mushola pribadi, kiblat, dan ketenangan sejati di tengah alam Lembang.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-5 justify-center">
+                <a href="#glamping" class="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-full font-bold text-lg shadow-2xl transition transform hover:scale-105">
+                    <i class="ri-eye-line mr-2"></i> Lihat Kamar
+                </a>
+                <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Assalamu'alaikum,%20saya%20ingin%20reservasi" class="border-2 border-white text-white hover:bg-white hover:text-emerald-700 px-10 py-5 rounded-full font-bold text-lg transition">
+                    <i class="ri-whatsapp-line mr-2"></i> Reservasi Langsung
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white" id="glamping">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="inline-block bg-emerald-100 text-emerald-700 px-6 py-3 rounded-full font-bold mb-5">
+                    <i class="ri-tent-line mr-2"></i> Koleksi Glamping Kami
+                </span>
+                <h2 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
+                    Pilih <span class="text-emerald-600">Hunian Impian</span> Anda
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Setiap tenda dirancang sesuai syariat dengan fasilitas premium.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active px-8 py-3 rounded-full font-bold transition" data-filter="all">Semua</button>
+                <button class="filter-btn px-8 py-3 rounded-full font-bold border border-emerald-300 transition" data-filter="available">Tersedia</button>
+                <button class="filter-btn px-8 py-3 rounded-full font-bold border border-emerald-300 transition" data-filter="standard">Standard</button>
+                <button class="filter-btn px-8 py-3 rounded-full font-bold border border-emerald-300 transition" data-filter="deluxe">Deluxe</button>
+                <button class="filter-btn px-8 py-3 rounded-full font-bold border border-emerald-300 transition" data-filter="family">Keluarga</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @forelse($glampings as $glamping)
+                <div class="glamping-card block rounded-2xl overflow-hidden shadow-2xl bg-white" data-status="{{ $glamping->status }}" data-type="{{ strtolower($glamping->type) }}">
                     <div class="relative">
-                        <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-gray-700 hover:text-emerald-600 transition-colors">
-                            <i class="ri-close-line text-xl"></i>
-                        </button>
-                        <div class="grid grid-cols-1 lg:grid-cols-2">
-                            <div class="relative h-80 lg:h-full">
-                                <img src="${glamping.images && glamping.images.length > 0 ? '/storage/' + glamping.images[0].image_path : '/images/placeholder.jpg'}" 
-                                     alt="${glamping.title.replace(/</g, '&lt;').replace(/>/g, '&gt;')}" 
-                                     class="w-full h-full object-cover">
-                                <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 to-transparent text-white">
-                                    <h3 class="text-2xl font-bold mb-2" style="font-family: Amiri, serif;">${glamping.title.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</h3>
-                                    <div class="flex items-center text-sm opacity-90">
-                                        <i class="ri-map-pin-line mr-1"></i>
-                                        <span>Lembang, Bandung</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex justify-between items-center mb-4">
-                                    <span class="text-2xl font-bold text-emerald-600">Rp ${new Intl.NumberFormat('id-ID').format(glamping.price)} <span class="text-sm font-normal text-gray-500">/ malam</span></span>
-                                    <div class="flex text-amber-500">
-                                        ${Array(5).fill().map((_, i) => 
-                                            `<i class="ri-star-fill ${i < glamping.rating ? '' : 'opacity-30'}"></i>`
-                                        ).join('')}
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="ri-user-line text-emerald-600"></i>
-                                        <span>${glamping.capacity} Tamu</span>
-                                    </div>
-                                    <div class="flex items-center space-x-2">
-                                        <i class="ri-hotel-bed-line text-emerald-600"></i>
-                                        <span>${glamping.beds} Tempat Tidur</span>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600 mb-4">${glamping.description || 'Tidak ada deskripsi tersedia.'}</p>
-                                <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Halo, saya ingin reservasi glamping syariah."
-                                    class="font-medium rounded-lg flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 w-full">
-                                    <i class="ri-whatsapp-line mr-2"></i>Reservasi Sekarang
-                                </a>
-                            </div>
+                        <img src="{{ $glamping->images->first()?->image_path ? asset('storage/'.$glamping->images->first()->image_path) : asset('images/placeholder.jpg') }}" alt="{{ $glamping->title }}" class="w-full h-80 object-cover transition-transform duration-700">
+                        <div class="absolute top-4 right-4">
+                            <span class="px-5 py-2 rounded-full text-white font-bold {{ $glamping->status == 'available' ? 'bg-emerald-600' : 'bg-red-600' }}">
+                                {{ $glamping->status == 'available' ? 'Tersedia' : 'Penuh' }}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+                            <h3 class="text-2xl font-bold">{{ $glamping->title }}</h3>
+                            <p class="text-sm opacity-90 flex items-center mt-1"><i class="ri-map-pin-line mr-1"></i> Lembang, Bandung</p>
                         </div>
                     </div>
-                `;
-                showModal(modalContent);
-            }
+                    <div class="p-6">
+                        <div class="flex justify-between mb-4 text-gray-600">
+                            <span><i class="ri-user-line text-emerald-600"></i> {{ $glamping->capacity }} Tamu</span>
+                            <span><i class="ri-hotel-bed-line text-emerald-600"></i> {{ $glamping->beds }} Bed</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <span class="text-3xl font-bold text-emerald-600">Rp {{ number_format($glamping->price, 0, ',', '.') }}</span>
+                                <span class="text-gray-500 text-sm">/ malam</span>
+                            </div>
+                            <div class="flex text-amber-500 text-xl">
+                                @for($i=1;$i<=5;$i++)
+                                    <i class="ri-star-fill {{ $i<=$glamping->rating ? '' : 'opacity-30' }}"></i>
+                                @endfor
+                            </div>
+                        </div>
+                        <button onclick="showGlampingModal({{ json_encode($glamping) }})" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-full font-bold transition shadow-xl">
+                            <i class="ri-eye-line mr-2"></i> Lihat Detail
+                        </button>
+                    </div>
+                </div>
+                @empty
+                <div class="col-span-full text-center py-20">
+                    <i class="ri-tent-line text-9xl text-gray-200 mb-6"></i>
+                    <h3 class="text-3xl font-bold text-gray-500">Belum ada kamar tersedia</h3>
+                    <p class="text-gray-400 mt-3">InsyaAllah segera hadir dengan keindahan yang lebih sempurna.</p>
+                </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
 
-            function showModal(content) {
-                const modal = document.getElementById('modal-container');
-                const modalInner = document.getElementById('modal-inner');
-                modalInner.innerHTML = content;
-                modal.classList.add('show');
-            }
+    <section class="py-20 bg-gradient-to-br from-emerald-50 to-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center bg-amber-100 text-amber-700 rounded-full px-6 py-3 mb-5 font-bold">
+                    <i class="ri-information-line mr-2"></i> Mengapa Memilih Kami
+                </div>
+                <h2 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
+                    Keunggulan <span class="text-emerald-600">Kamar Syariah</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nikmati pengalaman menginap yang nyaman, halal, dan penuh berkah di tengah alam indah.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition text-center">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ri-shield-check-line text-5xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">100% Syariah Compliant</h3>
+                    <p class="text-gray-600">Mushola pribadi, arah kiblat, makanan halal, dan segala fasilitas sesuai ajaran Islam.</p>
+                </div>
+                <div class="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition text-center">
+                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ri-leaf-line text-5xl text-amber-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Ramah Lingkungan</h3>
+                    <p class="text-gray-600">Material eco-friendly, hemat energi, dan menyatu harmonis dengan alam pegunungan.</p>
+                </div>
+                <div class="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition text-center">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ri-star-line text-5xl text-emerald-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Fasilitas Premium</h3>
+                    <p class="text-gray-600">AC, WiFi kencang, kamar mandi dalam, kitchenette, dan view kebun teh yang menakjubkan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            function closeModal() {
-                const modal = document.getElementById('modal-container');
-                modal.classList.remove('show');
-            }
+    <section class="py-20 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">Siap Mengalami Glamping Syariah?</h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-12 opacity-95">
+                Reservasi sekarang dan nikmati kenyamanan akomodasi halal dengan pemandangan alam terbaik di Lembang.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Assalamu'alaikum,%20saya%20ingin%20reservasi%20glamping%20syariah" class="bg-white text-emerald-700 hover:bg-gray-100 px-10 py-6 rounded-full font-bold text-xl shadow-2xl transition transform hover:scale-105">
+                    <i class="ri-whatsapp-line mr-3 text-2xl"></i> Reservasi via WhatsApp
+                </a>
+                <a href="tel:{{ $setting->whatsapp_number ?? '+6281234567890' }}" class="border-4 border-white text-white hover:bg-white hover:text-emerald-700 px-10 py-6 rounded-full font-bold text-xl transition">
+                    <i class="ri-phone-line mr-3 text-2xl"></i> Hubungi Kami
+                </a>
+            </div>
+        </div>
+    </section>
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const navLinks = document.querySelectorAll('.nav-link');
-                const navToggle = document.querySelector('.lg\\:hidden.p-2.rounded-lg.text-white');
-                const navMenu = document.querySelector('.lg\\:hidden.transition-all');
-                const navbar = document.querySelector('nav');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const href = link.getAttribute('href');
-                        if (href.startsWith('#')) {
-                            const targetId = href.substring(1);
-                            const targetSection = document.getElementById(targetId);
-                            if (targetSection) {
-                                window.scrollTo({
-                                    top: targetSection.offsetTop - 80,
-                                    behavior: 'smooth'
-                                });
-                                if (navMenu && !navMenu.classList.contains('max-h-0')) {
-                                    navMenu.classList.add('max-h-0', 'opacity-0');
-                                    navMenu.classList.remove('max-h-screen', 'opacity-100');
-                                }
-                            }
-                        } else {
-                            window.location.href = href;
-                        }
-                    });
-                });
-                if (navToggle && navMenu) {
-                    navToggle.addEventListener('click', () => {
-                        const isOpen = navMenu.classList.contains('max-h-0');
-                        navMenu.classList.toggle('max-h-0', !isOpen);
-                        navMenu.classList.toggle('max-h-screen', isOpen);
-                        navMenu.classList.toggle('opacity-0', !isOpen);
-                        navMenu.classList.toggle('opacity-100', isOpen);
-                    });
-                }
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) {
-                        navbar.classList.add('navbar-scrolled');
-                    } else {
-                        navbar.classList.remove('navbar-scrolled');
-                    }
-                });
-                const filterButtons = document.querySelectorAll('.filter-btn');
-                const glampingCards = document.querySelectorAll('.glamping-card');
-                filterButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        filterButtons.forEach(btn => {
-                            btn.classList.remove('active', 'bg-emerald-600', 'text-white');
-                            btn.classList.add('bg-white', 'text-emerald-600', 'border', 'border-emerald-200');
-                        });
-                        button.classList.add('active', 'bg-emerald-600', 'text-white');
-                        button.classList.remove('bg-white', 'text-emerald-600', 'border', 'border-emerald-200');
-                        const filter = button.getAttribute('data-filter');
-                        glampingCards.forEach(card => {
-                            const status = card.getAttribute('data-status');
-                            const type = card.getAttribute('data-type');
-                            if (filter === 'all' || filter === status || filter === type) {
-                                card.style.display = 'block';
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        });
-                    });
-                });
-            });
-        </script>
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">{{ $setting->name ?? 'Hayya Syariah Glamping' }}</h3>
+                    <p class="text-gray-400 text-justify leading-relaxed">{{ $setting->description ?? 'Glamping syariah pertama di Indonesia, harmonis dengan alam dan nilai Islami.' }}</p>
+                    <div class="flex space-x-3 mt-4">
+                        <a href="#" class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-all duration-300">
+                            <i class="ri-instagram-line text-white"></i>
+                        </a>
+                        <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}" class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 rounded-full flex items-center justify-center transition-all duration-300">
+                            <i class="ri-whatsapp-line text-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-emerald-300">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="{{ route('home.index') }}#tentang" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Tentang Kami</a></li>
+                        <li><a href="{{ route('home.index') }}#fasilitas" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Fasilitas</a></li>
+                        <li><a href="{{ route('home.kamar') }}" class="text-gray-400 hover:text-emerald-300 transition-colors duration-200">Kamar</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-emerald-300">Kontak</h4>
+                    <div class="space-y-4 text-gray-400 text-sm">
+                        <div class="flex items-start space-x-3">
+                            <i class="ri-map-pin-line text-emerald-400 mt-1"></i>
+                            <div>{{ $setting->address ?? 'Jl. Raya Lembang No. 123, Desa Cikole, Lembang, Bandung Barat 40391' }}</div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="ri-whatsapp-line text-emerald-400"></i>
+                            <div>{{ $setting->whatsapp_number ?? '+62 812-3456-7890' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 text-emerald-300">Layanan</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-center space-x-2"><i class="ri-check-line text-emerald-400"></i><span>Glamping Syariah</span></li>
+                        <li class="flex items-center space-x-2"><i class="ri-check-line text-emerald-400"></i><span>Halal Food & Beverage</span></li>
+                        <li class="flex items-center space-x-2"><i class="ri-check-line text-emerald-400"></i><span>Alam Asri & Ramah Lingkungan</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800">
+            <div class="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <div>© 2025 Hayya Syariah Glamping. All rights reserved.</div>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-emerald-300 transition-colors duration-200">Privacy Policy</a>
+                    <a href="#" class="hover:text-emerald-300 transition-colors duration-200">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="modal-container" class="modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div id="modal-inner" class="relative"></div>
+        </div>
     </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+    const navbar=document.querySelector('nav');
+    const menuToggle=document.getElementById('menu-toggle');
+    const mobileMenu=document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click',()=>{mobileMenu.classList.toggle('open')});
+
+    window.addEventListener('scroll',()=>{navbar.classList.toggle('navbar-scrolled',window.scrollY>50)});
+
+    document.querySelectorAll('a[href^="#"],a[href*="#"]').forEach(a=>{
+        a.addEventListener('click',function(e){
+            const href=this.getAttribute('href');
+            if(href.includes('#')&&!href.includes('://')){
+                const id=href.split('#')[1];
+                const target=document.getElementById(id);
+                if(target){
+                    e.preventDefault();
+                    const offset=navbar.offsetHeight+20;
+                    window.scrollTo({top:target.offsetTop-offset,behavior:'smooth'});
+                    if(mobileMenu.classList.contains('open'))mobileMenu.classList.remove('open');
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+        btn.addEventListener('click',function(){
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+            this.classList.add('active');
+            const f=this.dataset.filter;
+            document.querySelectorAll('.glamping-card').forEach(c=>{
+                const s=c.dataset.status;
+                const t=c.dataset.type;
+                c.style.display=(f==='all'||(f==='available'&&s==='available')||(f!=='available'&&t===f))?'block':'none';
+            });
+        });
+    });
+});
+
+function showGlampingModal(g){
+    document.getElementById('modal-inner').innerHTML=`
+        <button onclick="closeModal()" class="absolute top-6 right-6 z-50 w-16 h-16 bg-white rounded-full shadow-2xl flex items-center justify-center hover:bg-red-50 transition">
+            <i class="ri-close-line text-4xl text-gray-700"></i>
+        </button>
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            <div class="relative overflow-hidden">
+                <img src="${g.images?.[0]?.image_path?'/storage/'+g.images[0].image_path:'/images/placeholder.jpg'}" class="w-full h-96 lg:h-full object-cover" alt="${g.title}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div class="absolute bottom-10 left-10 text-white">
+                    <h3 class="text-5xl font-bold mb-3">${g.title}</h3>
+                    <p class="text-xl flex items-center"><i class="ri-map-pin-line mr-2"></i> Lembang, Bandung</p>
+                </div>
+            </div>
+            <div class="p-10 lg:p-16">
+                <div class="flex justify-between items-start mb-12">
+                    <p class="text-5xl font-bold text-emerald-600">Rp ${new Intl.NumberFormat('id-ID').format(g.price)}<span class="text-xl text-gray-500"> / malam</span></p>
+                    <div class="flex text-amber-500 text-4xl">${'★'.repeat(g.rating)+'☆'.repeat(5-g.rating)}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-10 mb-12">
+                    <div class="bg-emerald-50 p-8 rounded-3xl text-center">
+                        <p class="text-gray-600 mb-3 text-lg">Kapasitas</p>
+                        <p class="text-4xl font-bold text-emerald-700">${g.capacity} Tamu</p>
+                    </div>
+                    <div class="bg-emerald-50 p-8 rounded-3xl text-center">
+                        <p class="text-gray-600 mb-3 text-lg">Tempat Tidur</p>
+                        <p class="text-4xl font-bold text-emerald-700">${g.beds} Unit</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 text-lg leading-relaxed mb-12">${g.description||'Kamar nyaman dengan fasilitas lengkap, mushola pribadi, dan pemandangan alam yang memukau.'}</p>
+                <a href="https://wa.me/{{ $setting->whatsapp_number ?? '+6281234567890' }}?text=Assalamu'alaikum,%20saya%20tertarik%20dengan%20*${encodeURIComponent(g.title)}*%20seharga%20Rp%20${g.price.toLocaleString('id-ID')}%20per%20malam.%20Mohon%20info%20ketersediaan." class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white py-7 rounded-full font-bold text-2xl shadow-2xl transition transform hover:scale-105">
+                    <i class="ri-whatsapp-line mr-4 text-3xl"></i> Reservasi Sekarang via WhatsApp
+                </a>
+            </div>
+        </div>`;
+    document.getElementById('modal-container').classList.add('show');
+    document.body.style.overflow='hidden';
+}
+function closeModal(){
+    document.getElementById('modal-container').classList.remove('show');
+    document.body.style.overflow='auto';
+}
+</script>
 </body>
 </html>
